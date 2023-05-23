@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eventHandler.MenuController">
+   <children>
+      <VBox alignment="TOP_CENTER" layoutX="122.0" layoutY="100.0" prefHeight="200.0" prefWidth="357.0" spacing="20.0">
+         <children>
+            <Button fx:id="refButton" mnemonicParsing="false" onAction="#goRefControl" text="냉장고 관리" textAlignment="CENTER" />
+            <Button fx:id="cookableButton" mnemonicParsing="false" onAction="#goCookable" text="조리 가능한 레시피" />
+         </children>
+      </VBox>
+      <ImageView fx:id="logoImage" fitHeight="100.0" fitWidth="100.0" layoutX="21.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <image>
+            <Image url="/img/logo_main.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="logoutButton" layoutX="38.0" layoutY="337.0" mnemonicParsing="false" onAction="#logout" text="로그아웃" />
+   </children>
+</AnchorPane>

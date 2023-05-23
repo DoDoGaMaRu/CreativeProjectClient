@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="620.0" prefWidth="885.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eventHandler.DetailRecipeController">
+   <children>
+   
+       <ImageView fx:id="logoImage" fitHeight="100.0" fitWidth="100.0" layoutX="21.0" layoutY="23.0" onMouseClicked="#goMenu" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+           <image>
+               <Image url="/img/logo_main.png" />
+           </image>
+       </ImageView>
+       <VBox layoutX="120.0" layoutY="62.0" prefHeight="514.0" prefWidth="721.0" spacing="20.0">
+           <children>
+               <Label fx:id="foodNameLabel" prefHeight="37.0" prefWidth="721.0" text="Label">
+               <font>
+                  <Font size="24.0" />
+               </font></Label>
+               <Label fx:id="ingredientsLabel" prefHeight="56.0" prefWidth="721.0" text="Label" wrapText="true" />
+               <TableView fx:id="detailTableView" focusTraversable="false" prefHeight="332.0" prefWidth="721.0">
+                   <columns>
+                       <TableColumn fx:id="imgTableCol" prefWidth="110.0" text="이미지" />
+                       <TableColumn fx:id="descriptionTableCol" prefWidth="610.0" text="설명" />
+                   </columns>
+               </TableView>
+           </children>
+       </VBox>
+   </children>
+</AnchorPane>
