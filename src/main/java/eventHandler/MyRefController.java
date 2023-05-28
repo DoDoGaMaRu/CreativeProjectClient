@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import javax.print.DocFlavor;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -83,9 +84,8 @@ public class MyRefController implements Initializable {
 
     public void add(ActionEvent actionEvent) {
         //TODO null이 아닐때만 추가
-        data.add(new IngredientRow(new SimpleStringProperty(searchTextField.getText()), exprtDatePicker.getValue()));
-        searchTextField.clear();
-        exprtDatePicker.getEditor().clear();
+        //add
+        refresh();
     }
 
     public void goMenu(MouseEvent mouseEvent) throws IOException {
@@ -109,8 +109,21 @@ public class MyRefController implements Initializable {
             alert.setHeaderText(name + "를 삭제 하시겠습니까?");
             Optional<ButtonType> result = alert.showAndWait();
             if ( result.get() == ButtonType.OK ) {
-                data.remove(idx);
+                refresh();
             }
         }
+    }
+
+    public void refresh() {
+        Stage thisStage = (Stage)logoImage.getScene().getWindow();
+        Parent parent = null;
+        try {
+            parent = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/myRef.fxml"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Scene sc = new Scene(parent);
+        thisStage.setScene(sc);
+        thisStage.show();
     }
 }
