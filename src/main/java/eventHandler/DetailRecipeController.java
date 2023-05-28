@@ -38,15 +38,7 @@ public class DetailRecipeController implements Initializable {
     private TableColumn<DetailRow, ImageView> imgTableCol;
     @FXML
     private TableColumn<DetailRow, String> descriptionTableCol;
-    @FXML
-    private TableView<IngredientRow> regTableView;
-    @FXML
-    private TableColumn<IngredientRow, String> nameTableCol;
-    @FXML
-    private TableColumn<IngredientRow, LocalDate> exprDateTableCol;
-    private Recipe recipe;
     ObservableList<DetailRow> details;
-    ObservableList<IngredientRow> data;
     private List<DetailRow> detailList = new ArrayList<>();
 
     //더미데이터
@@ -72,9 +64,6 @@ public class DetailRecipeController implements Initializable {
 
         detailTableView.setItems(details);
     }
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
 
     public void goRecipeList(MouseEvent mouseEvent) throws Exception {
         Stage thisStage = (Stage)logoImage.getScene().getWindow();
@@ -82,25 +71,6 @@ public class DetailRecipeController implements Initializable {
         Scene sc = new Scene(parent);
         thisStage.setScene(sc);
         thisStage.show();
-    }
-
-    public void delIngredient(MouseEvent mouseEvent) {
-        if (data.size() == 0) {
-            return;
-        }
-        if( mouseEvent.getClickCount() > 1 ) {
-            int idx = regTableView.getSelectionModel().getSelectedIndex();
-            String name = nameTableCol.getCellData(idx);
-
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("삭제");
-            alert.setHeaderText(name + "를 삭제 하시겠습니까?");
-            Optional<ButtonType> result = alert.showAndWait();
-            if ( result.get() == ButtonType.OK ) {
-                data.remove(idx);
-                refresh();
-            }
-        }
     }
 
     public void goMenu() throws IOException {
@@ -111,21 +81,13 @@ public class DetailRecipeController implements Initializable {
         thisStage.show();
     }
 
-    public void addRecentlyEatList(ActionEvent actionEvent) throws IOException {
+    public void goAfterCook(ActionEvent actionEvent) throws IOException {
         //TODO 최근먹은 목록에 추가(영양소 추천을 위해)
-        goMenu();
-    }
-
-    public void refresh() {
         Stage thisStage = (Stage)logoImage.getScene().getWindow();
-        Parent parent = null;
-        try {
-            parent = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/detailRecipe.fxml"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Parent parent = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/afterCook.fxml"));
         Scene sc = new Scene(parent);
         thisStage.setScene(sc);
         thisStage.show();
     }
+
 }

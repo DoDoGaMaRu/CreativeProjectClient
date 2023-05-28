@@ -39,12 +39,12 @@
             </HBox>
             <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="360.0" spacing="5.0">
                <children>
-                  <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="173.0" />
+                  <TextField fx:id="searchTextField" onKeyReleased="#searchIngredientList" prefHeight="27.0" prefWidth="173.0" />
                   <DatePicker fx:id="exprtDatePicker" prefHeight="28.0" prefWidth="153.0" />
                   <Button fx:id="addButton" mnemonicParsing="false" onAction="#add" prefHeight="27.0" prefWidth="75.0" text="추가" />
                </children>
             </HBox>
-            <ListView fx:id="resultListView" prefHeight="200.0" prefWidth="200.0" />
+            <ListView fx:id="resultListView" onMouseClicked="#setSelectedItem" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </VBox>
       <ImageView fx:id="logoImage" fitHeight="100.0" fitWidth="100.0" layoutX="21.0" layoutY="23.0" onMouseClicked="#goMenu" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">

@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.json.simple.JSONObject;
 
 public class SignUpController {
     @FXML
@@ -22,8 +23,9 @@ public class SignUpController {
     private Label phoneNumDuplicatedChkLabel;
 
     public void register(ActionEvent actionEvent) {
-        boolean id_dupl_chk = is_duplicated_id(idTextField.getText());
-        boolean phone_dupl_chk = is_duplicated_phone_num(phoneTextField.getText());
+        JSONObject dupl_chk = new JSONObject(); // Todo Network에서 받아오는 걸로 수정
+        boolean id_dupl_chk = (boolean) dupl_chk.get("IDDupl");
+        boolean phone_dupl_chk = (boolean) dupl_chk.get("phNumDupl");
 
         if (id_dupl_chk) {
             idDuplicatedChkLabel.setText("Id Duplicated");
@@ -36,18 +38,7 @@ public class SignUpController {
         }
     }
 
-    private boolean is_duplicated_id(String id) {
-        return id.equals("admin");
-        //TODO DB에서 받아오는걸로 구현해야함
-    }
-
-    private boolean is_duplicated_phone_num(String phone_number) {
-        return phone_number.equals("1234");
-        //TODO DB에서 받아오는걸로 구현해야함
-    }
-
     private void regist() {
-        //TODO DB에 사용자 정보 저장
         alertPopUp();
         Stage stage = (Stage)registerButton.getScene().getWindow();
         stage.close();
@@ -59,6 +50,16 @@ public class SignUpController {
         alert.setContentText("회원가입 성공!");
         alert.setHeaderText(null);
         alert.show();
+    }
+
+    public JSONObject makeSignupJson() {
+        JSONObject signup = new JSONObject();
+        signup.put("IO", idTextField.getText());
+        signup.put("PW", pwTextField.getText());
+        signup.put("name", nameTextField.getText());
+        signup.put("phoneNumber", phoneTextField.getText());
+
+        return signup;
     }
 
 }
