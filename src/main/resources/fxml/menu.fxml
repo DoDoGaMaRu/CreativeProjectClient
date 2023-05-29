@@ -15,6 +15,7 @@
          <children>
             <Button fx:id="refButton" mnemonicParsing="false" onAction="#goRefControl" text="냉장고 관리" textAlignment="CENTER" />
             <Button fx:id="cookableButton" mnemonicParsing="false" onAction="#goCookable" text="조리 가능한 레시피" />
+            <Button fx:id="exprDateButton" mnemonicParsing="false" onAction="#goExprDate" text="유통기한순 레시피" />
          </children>
       </VBox>
       <ImageView fx:id="logoImage" fitHeight="100.0" fitWidth="100.0" layoutX="21.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
