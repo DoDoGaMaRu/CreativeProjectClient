@@ -5,9 +5,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import network.Requester;
@@ -30,7 +33,7 @@ public class LoginController {
 
     private final Requester requester =  Requester.getRequester();
 
-    public void login(ActionEvent actionEvent) throws IOException {
+    public void login() throws IOException {
         JSONObject userJson = makeLoginInfoJSON();
         Request req = Request.builder()
                 .type(RequestType.POST)
@@ -41,8 +44,11 @@ public class LoginController {
         JSONObject resBody = res.getBody();
 
         if (resBody.get("token") == null) {
-            // TODO 로그인 실패
-
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("알림");
+            alert.setContentText("로그인실패");
+            alert.setHeaderText(null);
+            alert.show();
         }
         else {
             // set cookie
@@ -71,5 +77,11 @@ public class LoginController {
         user.put("id", idTextField.getText());
         user.put("pw", pwTextField.getText());
         return user;
+    }
+
+    public void enter(KeyEvent keyEvent) throws IOException {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            login();
+        }
     }
 }
