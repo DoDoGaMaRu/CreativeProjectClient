@@ -34,5 +34,4 @@ public class Recipe {
     private String rcpNaTip;
     private Nutrient infoNutri;
     private Manual[] manuals;
-    private Ingredient[] ingredients;
 }

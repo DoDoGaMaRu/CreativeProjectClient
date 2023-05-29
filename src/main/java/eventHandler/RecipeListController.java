@@ -1,6 +1,7 @@
 package eventHandler;
 
-import eventHandler.components.RecipeRow;
+import domainObject.Recipe;
+import eventHandler.components.ImgLabelRow;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,11 +11,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.json.simple.JSONArray;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,32 +26,22 @@ public class RecipeListController implements Initializable {
     @FXML
     private Label titleLabel;
     @FXML
-    private TableView<RecipeRow> foodListTableView;
+    private TableView<ImgLabelRow> foodListTableView;
     @FXML
-    private TableColumn<RecipeRow, ImageView> foodImageCol;
+    private TableColumn<ImgLabelRow, ImageView> foodImageCol;
     @FXML
-    private TableColumn<RecipeRow, Label> foodNameCol;
-    ObservableList<RecipeRow> data;
+    private TableColumn<ImgLabelRow, Label> foodNameCol;
+    @FXML
+    private ImageView logoImage;
+    ObservableList<ImgLabelRow> data;
+    private ArrayList<Recipe> recipes;
 
-    //더미데이터
-    private ImageView view_1 = new ImageView("http://www.foodsafetykorea.go.kr/uploadimg/cook/10_00028_1.png");
-    private Label name_1 = new Label("새우 두부 계란찜");
-    private RecipeRow test_1 = new RecipeRow(view_1, name_1);
-    //private updater.Recipe dummy = new updater.Recipe();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        view_1.setFitHeight(100);
-        view_1.setFitWidth(100);
-        view_1.setPreserveRatio(true);
-        name_1.setFont(Font.font(20));
-        name_1.setMinHeight(100);
-        name_1.setAlignment(Pos.CENTER);
-
-        foodImageCol.setCellValueFactory(cellData -> cellData.getValue().getImgSrc());
-        foodNameCol.setCellValueFactory(cellData -> cellData.getValue().getFoodName());
+        foodImageCol.setCellValueFactory(cellData -> cellData.getValue().getImg());
+        foodNameCol.setCellValueFactory(cellData -> cellData.getValue().getText());
         data = FXCollections.observableArrayList();
-        data.add(test_1);
 
         foodListTableView.setItems(data);
     }
@@ -67,22 +58,40 @@ public class RecipeListController implements Initializable {
         titleLabel.setText(title);
     }
 
+    public void setRecipes(ArrayList<Recipe> recipes) {
+        this.recipes = recipes;
+        for (Recipe recipe : recipes) {
+            ImageView view = new ImageView(recipe.getAttFileNoMain());
+            Label label = new Label(recipe.getRcpNm());
+
+            view.setFitHeight(120);
+            view.setFitWidth(120);
+            view.setPreserveRatio(true);
+            label.setFont(Font.font(20));
+            label.setMinHeight(120);
+            label.setAlignment(Pos.CENTER);
+
+            ImgLabelRow row = new ImgLabelRow(view, label);
+            data.add(row);
+        }
+    }
+
     public void goRecipe(MouseEvent mouseEvent) throws IOException {
         if (mouseEvent.getClickCount() > 1) {
             int idx = foodListTableView.getSelectionModel().getSelectedIndex();
-            Stage thisStage = (Stage) titleLabel.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader();
-            Parent parent = loader.load(getClass().getClassLoader().getResource("fxml/detailRecipe.fxml"));
+            Stage stage = (Stage)logoImage.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/detailRecipe.fxml"));
+            Parent parent = null;
+            try {
+                parent = loader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            DetailRecipeController controller = loader.getController();
+            controller.setRecipe(recipes.get(idx));
             Scene sc = new Scene(parent);
-
-/*
-            com.example.client.controller.DetailRecipeController con = loader.getController();
-            con.setRecipe(dummy);
-*/
-
-            thisStage.setScene(sc);
-            thisStage.show();
-
+            stage.setScene(sc);
+            stage.show();
         }
     }
 
