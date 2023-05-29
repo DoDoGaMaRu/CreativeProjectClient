@@ -10,7 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
-<AnchorPane prefHeight="592.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eventHandler.RecipeListController">
+<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eventHandler.RecipeListController">
    <children>
        <ImageView fx:id="logoImage" fitHeight="100.0" fitWidth="100.0" layoutX="21.0" layoutY="23.0" onMouseClicked="#goMenu" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
            <image>
@@ -22,10 +22,10 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <TableView fx:id="foodListTableView" focusTraversable="false" layoutX="120.0" layoutY="96.0" onMouseClicked="#goRecipe" prefHeight="400.0" prefWidth="400.0">
+      <TableView fx:id="foodListTableView" focusTraversable="false" layoutX="120.0" layoutY="96.0" onMouseClicked="#goRecipe" prefHeight="650.0" prefWidth="628.0">
         <columns>
-          <TableColumn fx:id="foodImageCol" prefWidth="125.0" text="음식 사진" />
-          <TableColumn fx:id="foodNameCol" prefWidth="274.0" text="음식 이름" />
+          <TableColumn fx:id="foodImageCol" prefWidth="130.0" text="음식 사진" />
+          <TableColumn fx:id="foodNameCol" prefWidth="497.0" text="음식 이름" />
         </columns>
       </TableView>
    </children>

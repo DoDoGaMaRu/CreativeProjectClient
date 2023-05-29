@@ -5,20 +5,20 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
-public class RecipeRow {
+public class ImgLabelRow {
     private ObjectProperty<ImageView> img = new SimpleObjectProperty<>();
-    private ObjectProperty<Label> foodName = new SimpleObjectProperty<>();
+    private ObjectProperty<Label> text = new SimpleObjectProperty<>();
 
-    public RecipeRow(ImageView img, Label name) {
+    public ImgLabelRow(ImageView img, Label name) {
         this.img.set(img);
-        this.foodName.set(name);
+        this.text.set(name);
     }
 
-    public ObjectProperty<Label> getFoodName() {
-        return foodName;
+    public ObjectProperty<Label> getText() {
+        return text;
     }
 
-    public ObjectProperty<ImageView> getImgSrc() {
+    public ObjectProperty<ImageView> getImg() {
         return img;
     }
 }

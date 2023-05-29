@@ -13,29 +13,32 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="633.0" prefWidth="885.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eventHandler.DetailRecipeController">
+<AnchorPane prefHeight="800.0" prefWidth="885.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eventHandler.DetailRecipeController">
    <children>
-       <ImageView fx:id="logoImage" fitHeight="100.0" fitWidth="100.0" layoutX="21.0" layoutY="23.0" onMouseClicked="#goRecipeList" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+       <ImageView fx:id="logoImage" fitHeight="100.0" fitWidth="100.0" layoutX="21.0" layoutY="23.0" onMouseClicked="#goMenu" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
            <image>
                <Image url="/img/logo_main.png" />
            </image>
        </ImageView>
-       <VBox layoutX="120.0" layoutY="62.0" prefHeight="514.0" prefWidth="721.0" spacing="20.0">
+       <VBox layoutX="120.0" layoutY="62.0" prefHeight="647.0" prefWidth="726.0" spacing="20.0">
            <children>
                <Label fx:id="foodNameLabel" prefHeight="37.0" prefWidth="721.0" text="Label">
                <font>
-                  <Font size="24.0" />
+                  <Font size="40.0" />
                </font></Label>
-               <Label fx:id="ingredientsLabel" prefHeight="56.0" prefWidth="721.0" text="Label" wrapText="true" />
-               <TableView fx:id="detailTableView" focusTraversable="false" prefHeight="332.0" prefWidth="721.0">
+               <Label fx:id="ingredientsLabel" prefHeight="177.0" prefWidth="721.0" text="Label">
+               <font>
+                  <Font size="12.0" />
+               </font></Label>
+               <TableView fx:id="detailTableView" focusTraversable="false" prefHeight="476.0" prefWidth="721.0">
                    <columns>
-                       <TableColumn fx:id="imgTableCol" prefWidth="110.0" text="이미지" />
-                       <TableColumn fx:id="descriptionTableCol" prefWidth="610.0" text="설명" />
+                       <TableColumn fx:id="imgTableCol" prefWidth="200.0" sortable="false" text="이미지" />
+                       <TableColumn fx:id="descriptionTableCol" prefWidth="525.0" sortable="false" text="설명" />
                    </columns>
                </TableView>
 
            </children>
        </VBox>
-      <Button fx:id="cookedButton" layoutX="780.0" layoutY="596.0" mnemonicParsing="false" onAction="#goAfterCook" text="Cooked" />
+      <Button fx:id="cookedButton" layoutX="780.0" layoutY="746.0" mnemonicParsing="false" onAction="#goAfterCook" text="Cooked" />
    </children>
 </AnchorPane>
