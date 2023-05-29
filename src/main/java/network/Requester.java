@@ -12,12 +12,34 @@ public class Requester {
     private static final int PORT = 8080;
     private Socket socket;
 
+    private static Requester requester;
+    static {
+        initRequester();
+    }
+
+
     private DataInputStream dis;
     private DataOutputStream dos;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
 
+
     private JSONObject cookie;
+
+    private Requester() {
+        cookie = new JSONObject();
+    }
+
+    private static void initRequester() {
+        if (requester == null) {
+            requester = new Requester();
+        }
+    }
+
+    public static Requester getRequester() {
+        initRequester();
+        return requester;
+    }
 
     private void setConnection() {
         try {
@@ -51,5 +73,13 @@ public class Requester {
         }
 
         return res;
+    }
+
+    public void resetCookie() {
+        cookie = new JSONObject();
+    }
+
+    public JSONObject cookie() {
+        return cookie;
     }
 }
