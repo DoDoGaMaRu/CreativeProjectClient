@@ -1,25 +1,28 @@
 package eventHandler;
 
 import eventHandler.components.DetailRow;
+import eventHandler.components.IngredientRow;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import domainObject.Recipe;
 
+import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class DetailRecipeController implements Initializable {
@@ -35,7 +38,6 @@ public class DetailRecipeController implements Initializable {
     private TableColumn<DetailRow, ImageView> imgTableCol;
     @FXML
     private TableColumn<DetailRow, String> descriptionTableCol;
-    private Recipe recipe;
     ObservableList<DetailRow> details;
     private List<DetailRow> detailList = new ArrayList<>();
 
@@ -62,15 +64,30 @@ public class DetailRecipeController implements Initializable {
 
         detailTableView.setItems(details);
     }
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
 
-    public void goMenu(MouseEvent mouseEvent) throws Exception {
+    public void goRecipeList(MouseEvent mouseEvent) throws Exception {
         Stage thisStage = (Stage)logoImage.getScene().getWindow();
         Parent parent = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/recipeList.fxml"));
         Scene sc = new Scene(parent);
         thisStage.setScene(sc);
         thisStage.show();
     }
+
+    public void goMenu() throws IOException {
+        Stage thisStage = (Stage)logoImage.getScene().getWindow();
+        Parent parent = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/menu.fxml"));
+        Scene sc = new Scene(parent);
+        thisStage.setScene(sc);
+        thisStage.show();
+    }
+
+    public void goAfterCook(ActionEvent actionEvent) throws IOException {
+        //TODO 최근먹은 목록에 추가(영양소 추천을 위해)
+        Stage thisStage = (Stage)logoImage.getScene().getWindow();
+        Parent parent = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/afterCook.fxml"));
+        Scene sc = new Scene(parent);
+        thisStage.setScene(sc);
+        thisStage.show();
+    }
+
 }

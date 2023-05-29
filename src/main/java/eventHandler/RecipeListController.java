@@ -14,16 +14,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.json.simple.JSONArray;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class RecipeListController implements Initializable {
     @FXML
     private Label titleLabel;
     @FXML
-    private TableView<RecipeRow>foodListTableView;
+    private TableView<RecipeRow> foodListTableView;
     @FXML
     private TableColumn<RecipeRow, ImageView> foodImageCol;
     @FXML
@@ -54,19 +56,21 @@ public class RecipeListController implements Initializable {
     }
 
     public void goMenu(MouseEvent mouseEvent) throws IOException {
-        Stage thisStage = (Stage)titleLabel.getScene().getWindow();
+        Stage thisStage = (Stage) titleLabel.getScene().getWindow();
         Parent parent = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/menu.fxml"));
         Scene sc = new Scene(parent);
         thisStage.setScene(sc);
         thisStage.show();
     }
 
-    public void setTitle(String title) { titleLabel.setText(title); }
+    public void setTitle(String title) {
+        titleLabel.setText(title);
+    }
 
     public void goRecipe(MouseEvent mouseEvent) throws IOException {
-        if( mouseEvent.getClickCount() > 1 ) {
+        if (mouseEvent.getClickCount() > 1) {
             int idx = foodListTableView.getSelectionModel().getSelectedIndex();
-            Stage thisStage = (Stage)titleLabel.getScene().getWindow();
+            Stage thisStage = (Stage) titleLabel.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader();
             Parent parent = loader.load(getClass().getClassLoader().getResource("fxml/detailRecipe.fxml"));
             Scene sc = new Scene(parent);
@@ -81,4 +85,6 @@ public class RecipeListController implements Initializable {
 
         }
     }
+
+
 }
