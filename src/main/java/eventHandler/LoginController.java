@@ -10,6 +10,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import network.Requester;
+import network.protocol.Request;
+import network.protocol.RequestCode;
+import network.protocol.RequestType;
+import network.protocol.Response;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -23,15 +28,34 @@ public class LoginController {
     @FXML
     private PasswordField pwTextField;
 
+    private final Requester requester =  Requester.getRequester();
+
     public void login(ActionEvent actionEvent) throws IOException {
-        JSONObject userInfo = makeLoginInfoJSON();
-        System.out.println(userInfo);
-        //TODO 로그인 정보 비교 구현 해야함
-        Stage thisStage = (Stage)loginButton.getScene().getWindow();
-        Parent menu = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/menu.fxml"));
-        Scene sc = new Scene(menu);
-        thisStage.setScene(sc);
-        thisStage.show();
+        JSONObject userJson = makeLoginInfoJSON();
+        Request req = Request.builder()
+                .type(RequestType.POST)
+                .code((byte) (RequestCode.USER | RequestCode.LOGIN))
+                .body(userJson)
+                .build();
+        Response res = requester.sendRequest(req);
+        JSONObject resBody = res.getBody();
+
+        if (resBody.get("token") == null) {
+            // TODO 로그인 실패
+
+        }
+        else {
+            // set cookie
+            requester.cookie().put("serial", resBody.get("serial"));
+            requester.cookie().put("id", userJson.get("id"));
+            requester.cookie().put("token", resBody.get("token"));
+
+            Stage thisStage = (Stage)loginButton.getScene().getWindow();
+            Parent menu = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/menu.fxml"));
+            Scene sc = new Scene(menu);
+            thisStage.setScene(sc);
+            thisStage.show();
+        }
     }
 
     public void goSignUp(MouseEvent mouseEvent) throws IOException {
@@ -44,14 +68,8 @@ public class LoginController {
 
     public JSONObject makeLoginInfoJSON() {
         JSONObject user = new JSONObject();
-        user.put("ID", idTextField.getText());
-        user.put("PW", pwTextField.getText());
+        user.put("id", idTextField.getText());
+        user.put("pw", pwTextField.getText());
         return user;
-    }
-
-    public String getToken(JSONObject jsonObject) {
-        JSONParser parser = new JSONParser();
-        String token = jsonObject.get("token").toString();
-        return token;
     }
 }

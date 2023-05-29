@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import network.Requester;
 
 import java.io.IOException;
 
@@ -20,6 +21,8 @@ public class MenuController {
     private Button cookableButton;
     @FXML
     private Button exprDateButton;
+
+    private final Requester requester =  Requester.getRequester();
 
     public void goRefControl(ActionEvent actionEvent) throws IOException {
         Stage thisStage = (Stage)refButton.getScene().getWindow();
@@ -57,6 +60,8 @@ public class MenuController {
     }
 
     public void logout(ActionEvent actionEvent) throws IOException {
+        requester.resetCookie();
+
         Stage thisStage = (Stage)refButton.getScene().getWindow();
         Parent parent = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/login.fxml"));
         Scene sc = new Scene(parent);
