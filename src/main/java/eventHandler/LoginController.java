@@ -49,6 +49,8 @@ public class LoginController {
             alert.setContentText("로그인실패");
             alert.setHeaderText(null);
             alert.show();
+            idTextField.clear();
+            pwTextField.clear();
         }
         else {
             // set cookie

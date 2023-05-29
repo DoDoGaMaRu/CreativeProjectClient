@@ -8,8 +8,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Requester {
-    private static final String IP = "127.0.0.1";
-    private static final int PORT = 8080;
+    private static final String IP = "202.31.202.34";
+    private static final int PORT = 443;
     private Socket socket;
 
     private static Requester requester;

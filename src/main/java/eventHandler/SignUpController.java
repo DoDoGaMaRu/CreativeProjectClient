@@ -3,6 +3,8 @@ package eventHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import network.Requester;
 import network.protocol.Request;
@@ -10,6 +12,8 @@ import network.protocol.RequestCode;
 import network.protocol.RequestType;
 import network.protocol.Response;
 import org.json.simple.JSONObject;
+
+import java.io.IOException;
 
 public class SignUpController {
     @FXML
@@ -29,7 +33,7 @@ public class SignUpController {
 
     private final Requester requester =  Requester.getRequester();
 
-    public void register(ActionEvent actionEvent) {
+    public void register() {
         Request req = Request.builder()
                 .type(RequestType.POST)
                 .code((byte) (RequestCode.USER | RequestCode.REGIST))
@@ -70,6 +74,12 @@ public class SignUpController {
         signup.put("phone", phoneTextField.getText());
 
         return signup;
+    }
+
+    public void enter(KeyEvent keyEvent) throws IOException {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+           register();
+        }
     }
 
 }
