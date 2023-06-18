@@ -15,6 +15,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import network.protocol.Request;
+import network.protocol.RequestCode;
+import network.protocol.RequestType;
+import network.protocol.Response;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -23,6 +27,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import network.Requester;
+
 
 public class MyRefController implements Initializable {
 
@@ -43,12 +49,19 @@ public class MyRefController implements Initializable {
     ObservableList<String> searchResult;
     ObservableList<IngredientRow> myRefData;
     private LocalDate today = LocalDate.now();
-    private JSONArray myIngredients = new JSONArray();
-    private JSONArray ingredients = new JSONArray();
-
+    private JSONArray myIngredients;
+    private JSONArray ingredients;
+    private final Requester requester =  Requester.getRequester();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Request req = Request.builder()
+                .type(RequestType.GET)
+                .code((byte) (RequestCode.REFRIGERATOR | RequestCode.OPEN))
+                .cookie(requester.cookie())
+                .build();
+        Response res = requester.sendRequest(req);
+        myIngredients = (JSONArray) res.getBody().get("myIngredients");
         nameTableCol.setCellValueFactory(cellData -> cellData.getValue().getName());
         exprDateTableCol.setCellValueFactory(cellData -> cellData.getValue().getExprDate());
         exprDateTableCol.setCellFactory(column -> {
@@ -56,7 +69,9 @@ public class MyRefController implements Initializable {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-
+                    if(date == null) {
+                        return;
+                    }
                     TableRow currentRow = getTableRow();
                     if (!isEmpty()) {
                         if (date.isBefore(today)) {
@@ -76,16 +91,22 @@ public class MyRefController implements Initializable {
 
         myRefData = MyIngredientListControl.addMyIngredientData(myIngredients);
         regTableView.setItems(myRefData);
+        searchResult = FXCollections.observableArrayList();
     }
 
-    public void searchIngredientList(KeyEvent keyEvent) {
+    public void search(ActionEvent actionEvent) {
         if (searchTextField.getText().length() == 0) {
             return;
         }
-        makeSearchJson();
-        //TODO 서버에 JSON 전송
-        //TODO 서버에서 JSON 받아옴
-        ingredients = new JSONArray(); //서버에서 받아온것
+        JSONObject body = makeSearchJson();
+        Request req = Request.builder()
+                .type(RequestType.GET)
+                .code((byte) (RequestCode.INGREDIENT | RequestCode.SEARCH))
+                .cookie(requester.cookie())
+                .body(body)
+                .build();
+        Response res = requester.sendRequest(req);
+        ingredients = (JSONArray) res.getBody().get("ingredients");
         setSearchResult();
         resultListView.setItems(searchResult);
     }
@@ -107,16 +128,21 @@ public class MyRefController implements Initializable {
 
     public void setSelectedItem(MouseEvent mouseEvent) {
         if ( mouseEvent.getClickCount() > 1 ) {
-            int idx = regTableView.getSelectionModel().getSelectedIndex();
-            String name = nameTableCol.getCellData(idx);
-
+            String name = resultListView.getSelectionModel().getSelectedItem();
             searchTextField.setText(name);
         }
     }
 
     public void add(ActionEvent actionEvent) {
         Long key = getKey(searchTextField.getText());
-        makeKeyJSON(key); //TODO 여기서 만들어진 JSONobj를 서버에 보냄
+        JSONObject body = makeKeyJSON(key);
+        Request req = Request.builder()
+                .type(RequestType.POST)
+                .code((byte) (RequestCode.REFRIGERATOR | RequestCode.PUT_IN))
+                .cookie(requester.cookie())
+                .body(body)
+                .build();
+        Response res = requester.sendRequest(req);
         refresh();
     }
 
@@ -159,14 +185,21 @@ public class MyRefController implements Initializable {
             alert.setTitle("삭제");
             alert.setHeaderText(name + "를 삭제 하시겠습니까?");
             Optional<ButtonType> result = alert.showAndWait();
-            //TODO JSON에 getMyKey로 키값 전송해주기
+            JSONObject body = getMyKey(name);
             if ( result.get() == ButtonType.OK ) {
+                Request req = Request.builder()
+                        .type(RequestType.POST)
+                        .code((byte) (RequestCode.REFRIGERATOR | RequestCode.PUT_OUT))
+                        .cookie(requester.cookie())
+                        .body(body)
+                        .build();
+                Response res = requester.sendRequest(req);
                 refresh();
             }
         }
     }
 
-    public Long getMyKey(String name) {
+    public JSONObject getMyKey(String name) {
         Long myKey = null;
         for (int i = 0; i < myIngredients.size(); i++) {
             JSONObject jsonObj = (JSONObject)myIngredients.get(i);
@@ -175,7 +208,9 @@ public class MyRefController implements Initializable {
                 break;
             }
         }
-        return myKey;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("myKey", myKey);
+        return jsonObject;
     }
 
     public void refresh() {

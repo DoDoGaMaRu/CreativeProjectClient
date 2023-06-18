@@ -26,9 +26,15 @@ public class MenuController {
     @FXML
     private Button refButton;
     @FXML
-    private Button cookableButton;
+    private Button allButton;
     @FXML
     private Button exprDateButton;
+    @FXML
+    private Button almostButton;
+    @FXML
+    private Button nutrientButton;
+    @FXML
+    private Button notEatButton;
 
     private final Requester requester =  Requester.getRequester();
 
@@ -40,14 +46,14 @@ public class MenuController {
         thisStage.show();
     }
 
-    public void goCookable(ActionEvent actionEvent) throws IOException {
+    public void goAll(ActionEvent actionEvent) throws IOException {
         Request req = Request.builder()
                 .type(RequestType.GET)
                 .code((byte) (RequestCode.RECIPE | RequestCode.COOKABLE))
                 .cookie(requester.cookie())
                 .build();
         Response res = requester.sendRequest(req);
-        goSelectedPage(cookableButton, res);
+        goSelectedPage(allButton, res);
     }
 
     public void goExprDate(ActionEvent actionEvent) {
@@ -58,6 +64,36 @@ public class MenuController {
                 .build();
         Response res = requester.sendRequest(req);
         goSelectedPage(exprDateButton, res);
+    }
+
+    public void goAlmost(ActionEvent actionEvent) {
+        Request req = Request.builder()
+                .type(RequestType.GET)
+                .code((byte) (RequestCode.RECIPE | RequestCode.SEMI_COOKABLE))
+                .cookie(requester.cookie())
+                .build();
+        Response res = requester.sendRequest(req);
+        goSelectedPage(almostButton, res);
+    }
+
+    /*public void goNotEat(ActionEvent actionEvent) {
+        Request req = Request.builder()
+                .type(RequestType.GET)
+                .code((byte) (RequestCode.RECIPE | RequestCode.EXPRT_DATE))
+                .cookie(requester.cookie())
+                .build();
+        Response res = requester.sendRequest(req);
+        goSelectedPage(exprDateButton, res);
+    }*/
+
+    public void goNutrient(ActionEvent actionEvent) {
+        Request req = Request.builder()
+                .type(RequestType.GET)
+                .code((byte) (RequestCode.RECIPE | RequestCode.NUTRIENT))
+                .cookie(requester.cookie())
+                .build();
+        Response res = requester.sendRequest(req);
+        goSelectedPage(nutrientButton, res);
     }
 
     public void goSelectedPage(Button button, Response res) {

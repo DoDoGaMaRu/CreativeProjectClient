@@ -11,6 +11,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import network.Requester;
+import network.protocol.Request;
+import network.protocol.RequestCode;
+import network.protocol.RequestType;
+import network.protocol.Response;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -32,10 +37,18 @@ public class AfterCookController implements Initializable {
     ObservableList<IngredientRow> data;
     private LocalDate today = LocalDate.now();
     ObservableList<IngredientRow> myRefData;
-    private JSONArray myIngredients = new JSONArray(); //TODO 서버에서 받아온 JSON으로 해야함
+    private JSONArray myIngredients;
+    private final Requester requester =  Requester.getRequester();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Request req = Request.builder()
+                .type(RequestType.GET)
+                .code((byte) (RequestCode.REFRIGERATOR | RequestCode.OPEN))
+                .cookie(requester.cookie())
+                .build();
+        Response res = requester.sendRequest(req);
+        myIngredients = (JSONArray) res.getBody().get("myIngredients");
         nameTableCol.setCellValueFactory(cellData -> cellData.getValue().getName());
         exprDateTableCol.setCellValueFactory(cellData -> cellData.getValue().getExprDate());
         exprDateTableCol.setCellFactory(column -> {
@@ -43,7 +56,9 @@ public class AfterCookController implements Initializable {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-
+                    if(date == null) {
+                        return;
+                    }
                     TableRow currentRow = getTableRow();
                     if (!isEmpty()) {
                         if (date.isBefore(today)) {
@@ -62,7 +77,6 @@ public class AfterCookController implements Initializable {
         });
 
         myRefData = MyIngredientListControl.addMyIngredientData(myIngredients);
-
         regTableView.setItems(myRefData);
     }
 
@@ -87,13 +101,21 @@ public class AfterCookController implements Initializable {
             alert.setHeaderText(name + "를 삭제 하시겠습니까?");
             Optional<ButtonType> result = alert.showAndWait();
             //TODO JSON에 getMyKey로 키값 전송해주기
+            JSONObject body = getMyKey(name);
             if ( result.get() == ButtonType.OK ) {
+                Request req = Request.builder()
+                        .type(RequestType.POST)
+                        .code((byte) (RequestCode.REFRIGERATOR | RequestCode.PUT_OUT))
+                        .cookie(requester.cookie())
+                        .body(body)
+                        .build();
+                Response res = requester.sendRequest(req);
                 refresh();
             }
         }
     }
 
-    public Long getMyKey(String name) {
+    public JSONObject getMyKey(String name) {
         Long myKey = null;
         for (int i = 0; i < myIngredients.size(); i++) {
             JSONObject jsonObj = (JSONObject)myIngredients.get(i);
@@ -102,7 +124,9 @@ public class AfterCookController implements Initializable {
                 break;
             }
         }
-        return myKey;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("myKey", myKey);
+        return jsonObject;
     }
 
     public void refresh() {

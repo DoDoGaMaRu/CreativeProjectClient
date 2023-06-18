@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane onKeyPressed="#enter" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eventHandler.SignUpController">
+<AnchorPane onKeyPressed="#enter" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #f8efce;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eventHandler.SignUpController">
    <children>
       <VBox layoutX="104.0" layoutY="35.0" prefHeight="183.0" prefWidth="292.0" spacing="30.0" AnchorPane.topAnchor="35.0">
          <children>
@@ -14,7 +15,10 @@
             <PasswordField fx:id="pwTextField" promptText="PW" />
             <TextField fx:id="nameTextField" promptText="Name" />
             <TextField fx:id="phoneTextField" promptText="Phone Number" />
-            <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" prefHeight="183.0" prefWidth="292.0" text="Register" />
+            <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" prefHeight="183.0" prefWidth="292.0" style="-fx-background-color: #5B9BD5;" text="Register" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font></Button>
          </children>
       </VBox>
       <Label fx:id="idDuplicatedChkLabel" layoutX="109.0" layoutY="66.0" textFill="RED" />
