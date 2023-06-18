@@ -10,7 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
-<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eventHandler.RecipeListController">
+<AnchorPane prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #f8efce;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eventHandler.RecipeListController">
    <children>
        <ImageView fx:id="logoImage" fitHeight="100.0" fitWidth="100.0" layoutX="21.0" layoutY="23.0" onMouseClicked="#goMenu" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
            <image>

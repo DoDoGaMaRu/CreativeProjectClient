@@ -69,7 +69,9 @@ public class MyRefController implements Initializable {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-
+                    if(date == null) {
+                        return;
+                    }
                     TableRow currentRow = getTableRow();
                     if (!isEmpty()) {
                         if (date.isBefore(today)) {
@@ -89,6 +91,7 @@ public class MyRefController implements Initializable {
 
         myRefData = MyIngredientListControl.addMyIngredientData(myIngredients);
         regTableView.setItems(myRefData);
+        searchResult = FXCollections.observableArrayList();
     }
 
     public void search(ActionEvent actionEvent) {
@@ -125,9 +128,7 @@ public class MyRefController implements Initializable {
 
     public void setSelectedItem(MouseEvent mouseEvent) {
         if ( mouseEvent.getClickCount() > 1 ) {
-            int idx = regTableView.getSelectionModel().getSelectedIndex();
-            String name = nameTableCol.getCellData(idx);
-
+            String name = resultListView.getSelectionModel().getSelectedItem();
             searchTextField.setText(name);
         }
     }
@@ -184,7 +185,6 @@ public class MyRefController implements Initializable {
             alert.setTitle("삭제");
             alert.setHeaderText(name + "를 삭제 하시겠습니까?");
             Optional<ButtonType> result = alert.showAndWait();
-            //TODO JSON에 getMyKey로 키값 전송해주기
             JSONObject body = getMyKey(name);
             if ( result.get() == ButtonType.OK ) {
                 Request req = Request.builder()

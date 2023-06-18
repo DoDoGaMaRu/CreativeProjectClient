@@ -73,7 +73,7 @@ public class MenuController {
                 .cookie(requester.cookie())
                 .build();
         Response res = requester.sendRequest(req);
-        goSelectedPage(exprDateButton, res);
+        goSelectedPage(almostButton, res);
     }
 
     /*public void goNotEat(ActionEvent actionEvent) {
@@ -93,7 +93,7 @@ public class MenuController {
                 .cookie(requester.cookie())
                 .build();
         Response res = requester.sendRequest(req);
-        goSelectedPage(exprDateButton, res);
+        goSelectedPage(nutrientButton, res);
     }
 
     public void goSelectedPage(Button button, Response res) {

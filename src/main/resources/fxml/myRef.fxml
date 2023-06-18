@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.*?>
@@ -10,7 +11,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eventHandler.MyRefController">
+<AnchorPane prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #f8efce;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eventHandler.MyRefController">
    <children>
       <VBox layoutX="149.0" layoutY="50.0" prefHeight="701.0" prefWidth="617.0" spacing="20.0">
          <children>
@@ -40,12 +41,18 @@
             <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="360.0" spacing="15.0">
                <children>
                   <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="198.0" />
-                  <Button fx:id="searchButton" mnemonicParsing="false" onAction="#search" prefHeight="27.0" prefWidth="56.0" text="검색">
+                  <Button fx:id="searchButton" mnemonicParsing="false" onAction="#search" prefHeight="28.0" prefWidth="69.0" style="-fx-background-color: #5B9BD5;" text="검색" textFill="WHITE">
                      <HBox.margin>
                         <Insets right="150.0" />
-                     </HBox.margin></Button>
+                     </HBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font></Button>
                   <DatePicker fx:id="exprtDatePicker" prefHeight="28.0" prefWidth="153.0" />
-                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#add" prefHeight="27.0" prefWidth="75.0" text="추가" />
+                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#add" prefHeight="27.0" prefWidth="75.0" style="-fx-background-color: #5B9BD5;" text="추가" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Button>
                </children>
             </HBox>
             <ListView fx:id="resultListView" onMouseClicked="#setSelectedItem" prefHeight="274.0" prefWidth="617.0" />

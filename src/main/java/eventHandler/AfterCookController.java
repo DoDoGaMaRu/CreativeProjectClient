@@ -56,7 +56,9 @@ public class AfterCookController implements Initializable {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-
+                    if(date == null) {
+                        return;
+                    }
                     TableRow currentRow = getTableRow();
                     if (!isEmpty()) {
                         if (date.isBefore(today)) {
