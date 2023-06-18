@@ -18,7 +18,7 @@
             <TableView fx:id="regTableView" focusTraversable="false" onMouseClicked="#delIngredient" prefHeight="283.0" prefWidth="617.0">
               <columns>
                 <TableColumn fx:id="nameTableCol" prefWidth="193.0" sortable="false" text="이름" />
-                  <TableColumn fx:id="exprDateTableCol" prefWidth="212.0" sortable="false" text="유통기한" />
+                  <TableColumn fx:id="exprDateTableCol" prefWidth="419.0" sortable="false" text="유통기한" />
               </columns>
             </TableView>
             <HBox alignment="TOP_RIGHT" prefHeight="16.0" prefWidth="406.0">
