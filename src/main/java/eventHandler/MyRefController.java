@@ -95,26 +95,32 @@ public class MyRefController implements Initializable {
     }
 
     public void search(ActionEvent actionEvent) {
+        searchResult.clear();
         if (searchTextField.getText().length() == 0) {
-            return;
+            searchResult.add("검색어를 입력하세요");
+        } else {
+            JSONObject body = makeSearchJson();
+            Request req = Request.builder()
+                    .type(RequestType.GET)
+                    .code((byte) (RequestCode.INGREDIENT | RequestCode.SEARCH))
+                    .cookie(requester.cookie())
+                    .body(body)
+                    .build();
+            Response res = requester.sendRequest(req);
+            ingredients = (JSONArray) res.getBody().get("ingredients");
+            setSearchResult();
         }
-        JSONObject body = makeSearchJson();
-        Request req = Request.builder()
-                .type(RequestType.GET)
-                .code((byte) (RequestCode.INGREDIENT | RequestCode.SEARCH))
-                .cookie(requester.cookie())
-                .body(body)
-                .build();
-        Response res = requester.sendRequest(req);
-        ingredients = (JSONArray) res.getBody().get("ingredients");
-        setSearchResult();
         resultListView.setItems(searchResult);
     }
 
     private void setSearchResult() {
-        for (int i = 0; i < ingredients.size(); i++) {
-            JSONObject jsonObject = (JSONObject) ingredients.get(i);
-            searchResult.add(jsonObject.get("name").toString());
+        if (ingredients.size() == 0) {
+            searchResult.add("검색 결과가 없습니다.");
+        } else {
+            for (Object ingredient : ingredients) {
+                JSONObject jsonObject = (JSONObject) ingredient;
+                searchResult.add(jsonObject.get("name").toString());
+            }
         }
     }
 
@@ -122,7 +128,6 @@ public class MyRefController implements Initializable {
     private JSONObject makeSearchJson() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", searchTextField.getText());
-        System.out.println(searchTextField.getText());
         return jsonObject;
     }
 
@@ -135,6 +140,22 @@ public class MyRefController implements Initializable {
 
     public void add(ActionEvent actionEvent) {
         Long key = getKey(searchTextField.getText());
+        if (key == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("알림");
+            alert.setContentText("검색결과에서 이름을 설정하세요!");
+            alert.setHeaderText(null);
+            alert.show();
+            return;
+        }
+        if (exprtDatePicker.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("알림");
+            alert.setContentText("유통기한을 설정하세요!");
+            alert.setHeaderText(null);
+            alert.show();
+            return;
+        }
         JSONObject body = makeKeyJSON(key);
         Request req = Request.builder()
                 .type(RequestType.POST)

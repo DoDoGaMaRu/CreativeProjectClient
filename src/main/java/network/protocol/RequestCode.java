@@ -22,6 +22,7 @@ public class RequestCode {
     // USER
     public static final byte REGIST = USER | 1 << L2;
     public static final byte LOGIN = USER | 2 << L2;
+    public static final byte COOKED = USER | 3 << L2;
     // REFRIGERATOR
     public static final byte PUT_IN = REFRIGERATOR | 1 << L2;
     public static final byte PUT_OUT = REFRIGERATOR | 2 << L2;
@@ -29,10 +30,11 @@ public class RequestCode {
 
     // INGREDIENT
     public static final byte SEARCH = INGREDIENT | 1 << L2;
+    public static final byte COINCIDE = INGREDIENT | 2 << L2;
     // RECIPE
     public static final byte INFO = RECIPE | 1 << L2;
     public static final byte EXPRT_DATE = RECIPE |  2 << L2;
     public static final byte COOKABLE = RECIPE | 3 << L2;
     public static final byte SEMI_COOKABLE = RECIPE | 4 << L2;
-    public static final byte NUTRIENT = RECIPE | 5 << L2;
+    public static final byte RECENT = RECIPE | 5 << L2;
 }

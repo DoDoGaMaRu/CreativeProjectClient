@@ -23,7 +23,11 @@ public class SignUpController {
     @FXML
     private TextField nameTextField;
     @FXML
-    private TextField phoneTextField;
+    private TextField phoneTextField1;
+    @FXML
+    private TextField phoneTextField2;
+    @FXML
+    private TextField phoneTextField3;
     @FXML
     private Button registerButton;
     @FXML
@@ -71,8 +75,8 @@ public class SignUpController {
         signup.put("id", idTextField.getText());
         signup.put("pw", pwTextField.getText());
         signup.put("name", nameTextField.getText());
-        signup.put("phone", phoneTextField.getText());
-
+        String phone = phoneTextField1.getText() + phoneTextField2.getText() + phoneTextField3.getText();
+        signup.put("phone", phone);
         return signup;
     }
 

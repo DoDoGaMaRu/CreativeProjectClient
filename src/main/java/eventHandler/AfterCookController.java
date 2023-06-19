@@ -1,5 +1,6 @@
 package eventHandler;
 
+import domainObject.Recipe;
 import eventHandler.components.IngredientRow;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -37,18 +38,12 @@ public class AfterCookController implements Initializable {
     ObservableList<IngredientRow> data;
     private LocalDate today = LocalDate.now();
     ObservableList<IngredientRow> myRefData;
-    private JSONArray myIngredients;
+    private JSONArray myIngredients = new JSONArray();
     private final Requester requester =  Requester.getRequester();
+    private Recipe recipe;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Request req = Request.builder()
-                .type(RequestType.GET)
-                .code((byte) (RequestCode.REFRIGERATOR | RequestCode.OPEN))
-                .cookie(requester.cookie())
-                .build();
-        Response res = requester.sendRequest(req);
-        myIngredients = (JSONArray) res.getBody().get("myIngredients");
         nameTableCol.setCellValueFactory(cellData -> cellData.getValue().getName());
         exprDateTableCol.setCellValueFactory(cellData -> cellData.getValue().getExprDate());
         exprDateTableCol.setCellFactory(column -> {
@@ -100,7 +95,6 @@ public class AfterCookController implements Initializable {
             alert.setTitle("삭제");
             alert.setHeaderText(name + "를 삭제 하시겠습니까?");
             Optional<ButtonType> result = alert.showAndWait();
-            //TODO JSON에 getMyKey로 키값 전송해주기
             JSONObject body = getMyKey(name);
             if ( result.get() == ButtonType.OK ) {
                 Request req = Request.builder()
@@ -126,20 +120,54 @@ public class AfterCookController implements Initializable {
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("myKey", myKey);
+        System.out.println(myKey);
         return jsonObject;
     }
 
     public void refresh() {
         Stage thisStage = (Stage)logoImage.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/afterCook.fxml"));
         Parent parent = null;
         try {
-            parent = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/afterCook.fxml"));
+            parent = loader.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        AfterCookController controller = loader.getController();
+
+        controller.setMyIngredients(getMyIngredients());
+        controller.setRecipe(recipe);
         Scene sc = new Scene(parent);
         thisStage.setScene(sc);
         thisStage.show();
     }
 
+    public void setMyIngredients(JSONArray myIngredients) {
+        this.myIngredients = myIngredients;
+        myRefData = MyIngredientListControl.addMyIngredientData(myIngredients);
+        regTableView.setItems(myRefData);
+    }
+
+    public JSONArray getMyIngredients() {
+        JSONObject jsonObject = makeRcpSeqJSON();
+        Request req = Request.builder()
+                .type(RequestType.GET)
+                .code((byte) (RequestCode.INGREDIENT | RequestCode.COINCIDE))
+                .cookie(requester.cookie())
+                .body(jsonObject)
+                .build();
+        Response res = requester.sendRequest(req);
+        return (JSONArray) res.getBody().get("myIngredients");
+    }
+
+    public JSONObject makeRcpSeqJSON() {
+        JSONObject jsonObject = new JSONObject();
+        Long temp = Long.valueOf(recipe.getRcpSeq());
+        jsonObject.put("rcpSeq", temp);
+        return jsonObject;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
 }

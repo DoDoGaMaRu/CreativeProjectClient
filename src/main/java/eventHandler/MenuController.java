@@ -32,7 +32,7 @@ public class MenuController {
     @FXML
     private Button almostButton;
     @FXML
-    private Button nutrientButton;
+    private Button recentButton;
     @FXML
     private Button notEatButton;
 
@@ -53,7 +53,7 @@ public class MenuController {
                 .cookie(requester.cookie())
                 .build();
         Response res = requester.sendRequest(req);
-        goSelectedPage(allButton, res);
+        goSelectedPage(allButton, res, "recipes");
     }
 
     public void goExprDate(ActionEvent actionEvent) {
@@ -63,7 +63,7 @@ public class MenuController {
                 .cookie(requester.cookie())
                 .build();
         Response res = requester.sendRequest(req);
-        goSelectedPage(exprDateButton, res);
+        goSelectedPage(exprDateButton, res, "recipes");
     }
 
     public void goAlmost(ActionEvent actionEvent) {
@@ -73,32 +73,30 @@ public class MenuController {
                 .cookie(requester.cookie())
                 .build();
         Response res = requester.sendRequest(req);
-        goSelectedPage(almostButton, res);
+        goSelectedPage(almostButton, res, "recipes");
     }
 
-    /*public void goNotEat(ActionEvent actionEvent) {
+    public void goNotEat(ActionEvent actionEvent) {
         Request req = Request.builder()
                 .type(RequestType.GET)
-                .code((byte) (RequestCode.RECIPE | RequestCode.EXPRT_DATE))
+                .code((byte) (RequestCode.RECIPE | RequestCode.RECENT))
                 .cookie(requester.cookie())
                 .build();
         Response res = requester.sendRequest(req);
-        goSelectedPage(exprDateButton, res);
-    }*/
-
-    public void goNutrient(ActionEvent actionEvent) {
-        Request req = Request.builder()
-                .type(RequestType.GET)
-                .code((byte) (RequestCode.RECIPE | RequestCode.NUTRIENT))
-                .cookie(requester.cookie())
-                .build();
-        Response res = requester.sendRequest(req);
-        goSelectedPage(nutrientButton, res);
+        goSelectedPage(notEatButton, res, "recipes");
     }
 
-    public void goSelectedPage(Button button, Response res) {
+    public void goRecent(ActionEvent actionEvent) throws IOException {
+        Stage signUpStage =(Stage)refButton.getScene().getWindow();
+        Parent signUp = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/recent.fxml"));
+        Scene sc = new Scene(signUp);
+        signUpStage.setScene(sc);
+        signUpStage.show();
+    }
+
+    public void goSelectedPage(Button button, Response res, String key) {
         RecipeConverter recipeConverter = new RecipeConverter();
-        ArrayList<Recipe> recipes = recipeConverter.convertRecipes((JSONArray) res.getBody().get("recipes"));
+        ArrayList<Recipe> recipes = recipeConverter.convertRecipes((JSONArray) res.getBody().get(key));
 
         String title = button.getText();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/recipeList.fxml"));
