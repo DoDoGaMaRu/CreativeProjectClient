@@ -14,14 +14,26 @@
             <TextField fx:id="idTextField" promptText="ID" />
             <PasswordField fx:id="pwTextField" promptText="PW" />
             <TextField fx:id="nameTextField" promptText="Name" />
-            <TextField fx:id="phoneTextField" promptText="Phone Number" />
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <TextField fx:id="phoneTextField1" editable="false" text="010" />
+                  <Label prefHeight="28.0" prefWidth="7.0" text="-" />
+                  <TextField fx:id="phoneTextField2" />
+                  <Label prefHeight="34.0" prefWidth="7.0" text="-" />
+                  <TextField fx:id="phoneTextField3" />
+               </children>
+            </HBox>
             <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" prefHeight="183.0" prefWidth="292.0" style="-fx-background-color: #5B9BD5;" text="Register" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font></Button>
          </children>
       </VBox>
-      <Label fx:id="idDuplicatedChkLabel" layoutX="109.0" layoutY="66.0" textFill="RED" />
-      <Label fx:id="phoneNumDuplicatedChkLabel" layoutX="106.0" layoutY="224.0" textFill="RED" />
+      <Label fx:id="idDuplicatedChkLabel" layoutX="139.0" layoutY="63.0" prefHeight="15.0" prefWidth="256.0" textAlignment="RIGHT" textFill="RED" />
+      <Label fx:id="phoneNumDuplicatedChkLabel" layoutX="141.0" layoutY="224.0" prefHeight="15.0" prefWidth="256.0" textAlignment="RIGHT" textFill="RED" />
+      <Label layoutX="105.0" layoutY="177.0" prefHeight="15.0" prefWidth="91.0" text="Phone Number" />
+      <Label layoutX="106.0" layoutY="125.0" text="Name" />
+      <Label layoutX="106.0" layoutY="20.0" text="ID" />
+      <Label layoutX="105.0" layoutY="71.0" text="PW" />
    </children>
 </AnchorPane>

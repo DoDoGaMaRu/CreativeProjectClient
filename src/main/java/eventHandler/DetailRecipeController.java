@@ -1,17 +1,13 @@
 package eventHandler;
 
 import domainObject.Manual;
-import eventHandler.components.DetailRow;
 import eventHandler.components.ImgLabelRow;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -20,6 +16,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import domainObject.Recipe;
+import network.Requester;
+import network.protocol.Request;
+import network.protocol.RequestCode;
+import network.protocol.RequestType;
+import network.protocol.Response;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,24 +43,18 @@ public class DetailRecipeController implements Initializable {
     private TableColumn<ImgLabelRow, Label> descriptionTableCol;
     ObservableList<ImgLabelRow> details;
     private Recipe recipe;
+    private final Requester requester =  Requester.getRequester();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         details = FXCollections.observableArrayList();
-
+        ingredientsLabel.setWrapText(true);
         imgTableCol.setCellValueFactory(cellData -> cellData.getValue().getImg());
         descriptionTableCol.setCellValueFactory(cellData -> cellData.getValue().getText());
 
         detailTableView.setItems(details);
-    }
-
-    public void goRecipeList(MouseEvent mouseEvent) throws Exception {
-        Stage thisStage = (Stage)logoImage.getScene().getWindow();
-        Parent parent = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/recipeList.fxml"));
-        Scene sc = new Scene(parent);
-        thisStage.setScene(sc);
-        thisStage.show();
     }
 
     public void goMenu() throws IOException {
@@ -69,12 +66,52 @@ public class DetailRecipeController implements Initializable {
     }
 
     public void goAfterCook(ActionEvent actionEvent) throws IOException {
-        //TODO 최근먹은 목록에 추가(영양소 추천을 위해)
+        postCookedRecipe();
+        JSONArray myIngredients = getMyIngredients();
         Stage thisStage = (Stage)logoImage.getScene().getWindow();
-        Parent parent = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/afterCook.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/afterCook.fxml"));
+        Parent parent = null;
+        try {
+            parent = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        AfterCookController controller = loader.getController();
+        controller.setMyIngredients(myIngredients);
+        controller.setRecipe(recipe);
         Scene sc = new Scene(parent);
         thisStage.setScene(sc);
         thisStage.show();
+    }
+
+    public void postCookedRecipe() {
+        JSONObject jsonObject = makeRcpSeqJSON();
+        Request req = Request.builder()
+                .type(RequestType.POST)
+                .code((byte) (RequestCode.USER | RequestCode.COOKED))
+                .cookie(requester.cookie())
+                .body(jsonObject)
+                .build();
+        Response res = requester.sendRequest(req);
+    }
+
+    public JSONArray getMyIngredients() {
+        JSONObject jsonObject = makeRcpSeqJSON();
+        Request req = Request.builder()
+                .type(RequestType.GET)
+                .code((byte) (RequestCode.INGREDIENT | RequestCode.COINCIDE))
+                .cookie(requester.cookie())
+                .body(jsonObject)
+                .build();
+        Response res = requester.sendRequest(req);
+        return (JSONArray) res.getBody().get("myIngredients");
+    }
+
+    public JSONObject makeRcpSeqJSON() {
+        JSONObject jsonObject = new JSONObject();
+        Long temp = Long.valueOf(recipe.getRcpSeq());
+        jsonObject.put("rcpSeq", temp);
+        return jsonObject;
     }
 
     public void setRecipe(Recipe recipe) {
